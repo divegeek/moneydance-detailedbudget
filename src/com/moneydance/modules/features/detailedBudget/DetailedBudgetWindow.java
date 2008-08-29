@@ -143,7 +143,7 @@ public class DetailedBudgetWindow extends JFrame {
 	    
 	    getContentPane().add(p);
 
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    enableEvents(WindowEvent.WINDOW_CLOSING);
 
 	    setSize(600, 500);
