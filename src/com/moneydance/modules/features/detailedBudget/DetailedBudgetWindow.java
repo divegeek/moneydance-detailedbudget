@@ -95,7 +95,7 @@ public class DetailedBudgetWindow extends JFrame {
 			boolean budgetWithSubtotal, boolean diffWithSubtotal,
 			boolean showAllAccounts) {
 	    super("Detailed Budget");
-	    System.out.println("Detailed Budget");
+//	    System.out.println("Detailed Budget");
 	    this.extension = extension;
 	    this.budgetName = budgetName;
 	    this.budgetPeriod = budgetPeriod;
@@ -149,7 +149,7 @@ public class DetailedBudgetWindow extends JFrame {
 	    setSize(600, 500);
 	    AwtUtil.centerWindow(this);
 
-		System.out.println("Done Init DB.");
+//		System.out.println("Done Init DB.");
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class DetailedBudgetWindow extends JFrame {
 		
 		// End
 		sb.append("</HTML>");
-		System.out.println("Done getReportStr");
+//		System.out.println("Done getReportStr.");
 		return sb.toString();
 	}
 	
@@ -304,6 +304,7 @@ public class DetailedBudgetWindow extends JFrame {
 			// Only accept income or expense accounts
 			if (type == INCOME_ACCOUNTS && !(account instanceof IncomeAccount)) continue;
 			else if (type == EXPENSE_ACCOUNTS && !(account instanceof ExpenseAccount)) continue;
+//			System.out.println("  account="+account.getAccountName()+" "+account);
 
 			Integer accNum = new Integer(account.getAccountNum());
 			// Account Name
@@ -325,6 +326,7 @@ public class DetailedBudgetWindow extends JFrame {
 					actual = item.actualAmount;
 					budget = item.budgetAmount;
 				}
+//				System.out.println(" -- item="+item+" actual="+actual+" budget="+budget);
 				
 				if (budgetWithSubtotal || columns.size() == 1) {
 					sb.append("<td align=\"right\">").append(getCurrencyStr(budget,null)).append("</td>");
@@ -354,7 +356,7 @@ public class DetailedBudgetWindow extends JFrame {
 			sb.append("</tr>\n");
 			
 			// Do we show all accounts, even if all 0?
-			if (showAllAccounts || totalActual > 0 || totalBudget > 0) {
+			if (showAllAccounts || totalActual != 0 || totalBudget != 0) {
 				sbo.append(sb);
 			}
 		}
@@ -501,6 +503,7 @@ public class DetailedBudgetWindow extends JFrame {
 	 * @return Map of int (account number) to DetailedBudgetItem
 	 */
 	private Map getDetailedBudgetItems(Date startDay, Date endDay, int type) {
+//		System.out.println("getDetailedBudgetItems type="+type);
 		Map txnMap = new HashMap();
 		
 		TransactionSet txSet = extension.getUnprotectedContext().getRootAccount().getTransactionSet();
@@ -510,6 +513,7 @@ public class DetailedBudgetWindow extends JFrame {
 		for (; e.hasMoreElements(); ) {
 			AbstractTxn t = (AbstractTxn)e.nextElement();
 			if (t == null) continue;
+//			System.out.println("..txn="+t.getAccount().getAccountName()+" => "+t.getAccount().getClass().getName());
 			// Only accept income or expense accounts
 			if (type == INCOME_ACCOUNTS && !(t.getAccount() instanceof IncomeAccount)) continue;
 			else if (type == EXPENSE_ACCOUNTS && !(t.getAccount() instanceof ExpenseAccount)) continue;
@@ -517,7 +521,7 @@ public class DetailedBudgetWindow extends JFrame {
 			// Is this transaction in the range?
 			Date dt = new Date(t.getDate());
 			if (DateUtil.isInRange(dt,startDay,endDay)) {
-//				System.out.println("  t="+t+" class="+t.getClass().getName());
+//				System.out.println("    in date range t="+t+" class="+t.getClass().getName());
 				addTransaction(txnMap, t);
 			}
 		}
