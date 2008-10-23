@@ -608,6 +608,18 @@ public class DetailedBudgetWindow extends JFrame {
 		return sb.toString();
 	}
 
+	private String getFullAccountName(Account account) {
+		if (account == null) return "";
+		StringBuffer sb = new StringBuffer();
+		String[] names = account.getAllAccountNames();
+		for (int i = 0; i < names.length; i++) {
+			if (i > 0) sb.append(":");
+			sb.append(names[i]);
+		}
+		
+		return sb.toString();
+	}
+	
 	/** Return amount as dollars and cents in HTML format. 
 	 * If date in future return empty space.*/
 	public String getCurrencyStr(long amount, Date dt) {
@@ -815,7 +827,7 @@ public class DetailedBudgetWindow extends JFrame {
 			public int compare(Object arg0, Object arg1) {
 				Account a0 = (Account) arg0;
 				Account a1 = (Account) arg1;
-				return getAccountName(a0).compareTo(getAccountName(a1));
+				return getFullAccountName(a0).compareTo(getFullAccountName(a1));
 			}
 		});
 
