@@ -41,6 +41,7 @@ public class BudgetSettingsWindow
   private JCheckBox includeBudgetedInEachStep;
   private JCheckBox includeDifferenceInEachStep;
   private JCheckBox showAllAccounts;
+  private JCheckBox addSubtotalsForParentCategories;
 
   private JButton generateButton;
   private JButton closeButton;
@@ -148,7 +149,14 @@ public class BudgetSettingsWindow
     showAllAccounts = new JCheckBox();
     p.add(showAllAccounts,AwtUtil.getConstraints(1, row, 1, 1, 1, 1, false, false,GridBagConstraints.WEST,3));
     row++;
-
+    
+    // Add Subtotals For Parent Categories
+    JLabel lblAddSubtotalsForParentCategories = new JLabel("Subtotals For Parent Categories");
+    p.add(lblAddSubtotalsForParentCategories,AwtUtil.getConstraints(0, row, 1, 1, 1, 1, false, false,GridBagConstraints.EAST,3));
+    addSubtotalsForParentCategories = new JCheckBox();
+    p.add(addSubtotalsForParentCategories,AwtUtil.getConstraints(1, row, 1, 1, 1, 1, false, false,GridBagConstraints.WEST,3));
+    row++;
+    
     p.add(Box.createVerticalStrut(8), AwtUtil.getConstraints(0,row,0,0,1,1,false,false));
     row++;
     // Buttons
@@ -177,7 +185,7 @@ public class BudgetSettingsWindow
         
 //    PrintStream c = new PrintStream(new ConsoleStream());
 
-    setSize(350, 350);
+    setSize(400, 360);
     AwtUtil.centerWindow(this);
     
     budgetPeriod.setSelectedIndex(0);
@@ -196,7 +204,8 @@ public class BudgetSettingsWindow
 				(String)subTotalBy.getSelectedItem(),
 				includeBudgetedInEachStep.isSelected(),
 				includeDifferenceInEachStep.isSelected(),
-				showAllAccounts.isSelected()
+				showAllAccounts.isSelected(),
+				addSubtotalsForParentCategories.isSelected()
 				);
 		win.setVisible(true);
 		this.setVisible(false);
