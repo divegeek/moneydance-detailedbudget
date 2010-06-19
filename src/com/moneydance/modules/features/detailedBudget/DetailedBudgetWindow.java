@@ -50,8 +50,8 @@ import com.moneydance.awt.AwtUtil;
  * add per year and divide per period).
  * */
 public class DetailedBudgetWindow extends JFrame {
-
-    private Main extension;
+	private static final long serialVersionUID = 1L;
+	private Main extension;
 	private String budgetName;
 	private String budgetPeriod;
 	private Date startDate;
@@ -219,7 +219,7 @@ public class DetailedBudgetWindow extends JFrame {
 			sb.append("<tr><td>&nbsp</td>\n");
 			if (columns.size() > 1) {
 				for (Iterator iterator = columns.iterator(); iterator.hasNext();) {
-					DetailedBudgetColumn col = (DetailedBudgetColumn) iterator.next();
+					/*DetailedBudgetColumn col = (DetailedBudgetColumn) */iterator.next();
 					if (budgetWithSubtotal || columns.size() == 1) {
 						sb.append("<td align=\"center\"><strong>Budget</strong></td>");
 					}
@@ -321,7 +321,7 @@ public class DetailedBudgetWindow extends JFrame {
 			Account account = (Account) iterator.next();
 			StringBuffer sb = new StringBuffer();
 			StringBuffer sbBefore = new StringBuffer();
-			StringBuffer sbAfter = new StringBuffer();
+			//StringBuffer sbAfter = new StringBuffer();
 			if (account == null) continue;
 			// Only accept income or expense accounts
 			if (type == INCOME_ACCOUNTS && !(account instanceof IncomeAccount)) continue;
@@ -663,7 +663,7 @@ public class DetailedBudgetWindow extends JFrame {
 		}
 
 		// Loop through all budgeted items
-		// If mopre than one budget has the same Category budgeted, it
+		// If more than one budget has the same Category budgeted, it
 		//will use the last budgets value (Should be same really anyway)
 		BudgetList budList = extension.getUnprotectedContext().getRootAccount().getBudgetList();
 		for (int i = 0; i < budList.getBudgetCount(); i++) {
@@ -671,6 +671,7 @@ public class DetailedBudgetWindow extends JFrame {
 			for (int j = 0; j < b.getItemCount(); j++) {
 				BudgetItem bi = b.getItem(j);
 				Account a = bi.getTransferAccount();
+
 				// Only accept income or expense accounts
 				if (type == INCOME_ACCOUNTS && !(a instanceof IncomeAccount)) continue;
 				else if (type == EXPENSE_ACCOUNTS && !(a instanceof ExpenseAccount)) continue;
@@ -704,7 +705,7 @@ public class DetailedBudgetWindow extends JFrame {
 		Date budStartDate = DateUtil.getDateYYYYMMDD(bi.getIntervalStartDate());
 		Date budEndDate = DateUtil.getDateYYYYMMDD(bi.getIntervalEndDate());
 		Date budDt = budStartDate;
-		
+
 		// Is it after end day?
 		if (budStartDate == null || budStartDate.after(endDay)) return 0;
 		// Is it before start day
@@ -723,7 +724,7 @@ public class DetailedBudgetWindow extends JFrame {
 				case BudgetItem.INTERVAL_BI_MONTHLY: budDt = DateUtil.addMonths(budDt, 2); break;
 				case BudgetItem.INTERVAL_BI_WEEKLY: budDt = DateUtil.addWeeks(budDt,2); break;
 				case BudgetItem.INTERVAL_DAILY:budDt = DateUtil.addDays(budDt,1);break;
-				case BudgetItem.INTERVAL_MONTHLY:budDt = DateUtil.addMonths(budDt,1);break;
+				case BudgetItem.INTERVAL_MONTHLY:budDt = DateUtil.addMonths(budDt,1); break;
 				case BudgetItem.INTERVAL_SEMI_ANNUALLY: {
 					if (DateUtil.isSameDayOfYear(budDt,budStartDate)) {
 						budDt = DateUtil.addDays(budDt,182);
@@ -747,7 +748,7 @@ public class DetailedBudgetWindow extends JFrame {
 				case BudgetItem.INTERVAL_WEEKLY: budDt = DateUtil.addWeeks(budDt,1); break;
 				default: done = true;
 			}
-			
+
 			// Is it past date
 			if (budDt.after(endDay) || budDt.after(budEndDate)) {
 				break;
@@ -978,3 +979,7 @@ public class DetailedBudgetWindow extends JFrame {
 		
 	}
 }
+
+// Local Variables:
+// tab-width: 4
+// End:

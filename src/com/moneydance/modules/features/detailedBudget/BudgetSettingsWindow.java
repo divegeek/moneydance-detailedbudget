@@ -31,6 +31,7 @@ import com.moneydance.util.CustomDateFormat;
 public class BudgetSettingsWindow 
   extends JFrame
 {
+  private static final long serialVersionUID = 1L;
   private Main extension;
   private JComboBox budgetName;
   private JComboBox budgetPeriod;

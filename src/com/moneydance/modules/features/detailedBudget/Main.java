@@ -57,11 +57,11 @@ public class Main
   /** Process an invokation of this module with the given URI */
   public void invoke(String uri) {
     String command = uri;
-    String parameters = "";
+    //String parameters = "";
     int theIdx = uri.indexOf('?');
     if(theIdx>=0) {
       command = uri.substring(0, theIdx);
-      parameters = uri.substring(theIdx+1);
+      /*parameters =*/uri.substring(theIdx+1);
     }
     else {
       theIdx = uri.indexOf(':');

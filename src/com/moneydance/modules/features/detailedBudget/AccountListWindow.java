@@ -4,19 +4,27 @@
 
 package com.moneydance.modules.features.detailedBudget;
 
-import com.moneydance.awt.*;
-import com.moneydance.apps.md.controller.Common;
-import com.moneydance.apps.md.model.*;
-import com.moneydance.apps.md.controller.Util;
+import java.awt.AWTEvent;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import java.text.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.RootAccount;
+import com.moneydance.awt.AwtUtil;
 
 /** Window used for Account List interface
   ------------------------------------------------------------------------
@@ -26,6 +34,8 @@ public class AccountListWindow
   extends JFrame
   implements ActionListener
 {
+  private static final long serialVersionUID = 1L;
+  
   private Main extension;
   private JTextArea accountListArea;
   private JButton clearButton;
@@ -63,7 +73,7 @@ public class AccountListWindow
     closeButton.addActionListener(this);
     clearButton.addActionListener(this);
         
-    PrintStream c = new PrintStream(new ConsoleStream());
+    /*PrintStream c = */new PrintStream(new ConsoleStream());
 
     setSize(500, 400);
     AwtUtil.centerWindow(this);
