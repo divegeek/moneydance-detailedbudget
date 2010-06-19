@@ -81,5 +81,11 @@ public class TestDetailedBudgetWindow extends TestCase
 												   BudgetItem.INTERVAL_WEEKLY, 100, 
 												   20100601, 20100617);
 		TestCase.assertEquals(243, r); 
+		
+		// Monthly not prorated, 
+		r = DetailedBudgetWindow.getBudgetedAmount(20100101, 20100301, 
+												   BudgetItem.INTERVAL_MONTHLY, 62800, 
+												   20100101, 20100619);
+		TestCase.assertEquals(127626, r);
 	}
 }

@@ -783,7 +783,7 @@ public class DetailedBudgetWindow extends JFrame {
 			buildIntervalMap();
 				
 		int perStart = budStart;
-		int perEnd;
+		int perEnd = perStart;
 
 		// Do the report period and budget period overlap?
 		if (budStart > repEnd || budEnd < repStart)
@@ -801,18 +801,17 @@ public class DetailedBudgetWindow extends JFrame {
 		IntervalInfo i = (IntervalInfo) intervalMap.get(new Integer(interval));
 		
 		long amount = 0;
-		while (perStart < repEnd) 
+		while (perEnd < repEnd) 
 		{
 			// budDt is the beginning of one budget period.  Find the
 			// end of the period.
+			perStart = perEnd;
 			perEnd = Util.incrementDate(perStart, i.years, i.months, i.days);
 			
 			if (perEnd <= repStart)
-			{
-				// Haven't yet gotten to the start of the report period
-				perStart = perEnd;
 				continue;
-			}
+			if (perStart > budEnd)
+				break;
 
 			// Determine if we have a partial period, and what the
 			// start and end dates are.
@@ -855,7 +854,6 @@ public class DetailedBudgetWindow extends JFrame {
 					if (endFirst < calcEndDt)
 						amount += intervalAmount;
 				}
-				perStart = perEnd;
 				continue;
 			}
 
@@ -863,8 +861,6 @@ public class DetailedBudgetWindow extends JFrame {
 				amount += intervalAmount;
 			else if (i.prorate)
 				amount += (10 * intervalAmount * calcLen / periodLen + 5) / 10;
-
-			perStart = perEnd;
 		}
 		
 		return amount;
