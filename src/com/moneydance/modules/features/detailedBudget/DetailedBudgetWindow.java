@@ -667,7 +667,7 @@ public class DetailedBudgetWindow extends JFrame {
 
 		// Loop through all budgeted items
 		// If more than one budget has the same Category budgeted, it
-		//will use the last budgets value (Should be same really anyway)
+		// will sum them.
 		BudgetList budList = extension.getUnprotectedContext().getRootAccount().getBudgetList();
 		for (int i = 0; i < budList.getBudgetCount(); i++) {
 			Budget b = budList.getBudget(i);
@@ -694,7 +694,7 @@ public class DetailedBudgetWindow extends JFrame {
 					item = new DetailedBudgetItem(accNum.intValue(),budgetedAmount,0);
 					txnMap.put(accNum,item);
 				} else {
-					item.budgetAmount = budgetedAmount;
+					item.budgetAmount += budgetedAmount;
 				}
 			}
 		}
