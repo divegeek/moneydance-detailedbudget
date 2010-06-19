@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
+import com.moneydance.apps.md.controller.Util;
 import com.moneydance.apps.md.model.AbstractTxn;
 import com.moneydance.apps.md.model.Account;
 import com.moneydance.apps.md.model.Budget;
@@ -67,7 +68,7 @@ public class DetailedBudgetWindow extends JFrame {
 	private JButton saveButton;
 	private JButton closeButton;
 
-	/** Categories to shoiw in report*/
+	/** Categories to show in report*/
 	private List categories = null;
 	
 	public static final DecimalFormat CURR_FMT = new DecimalFormat("#,##0");
@@ -655,8 +656,10 @@ public class DetailedBudgetWindow extends JFrame {
 			else if (type == EXPENSE_ACCOUNTS && !(t.getAccount() instanceof ExpenseAccount)) continue;
 			
 			// Is this transaction in the range?
-			Date dt = new Date(t.getDate());
-			if (DateUtil.isInRange(dt,startDay,endDay)) {
+			int intStartDay = Util.convertDateToInt(startDay);
+			int intEndDay   = Util.convertDateToInt(endDay);
+			int dt = t.getDateInt();
+			if (intStartDay <= dt && dt <= intEndDay) {
 //				System.out.println("    in date range t="+t+" class="+t.getClass().getName());
 				addTransaction(txnMap, t);
 			}
@@ -677,7 +680,12 @@ public class DetailedBudgetWindow extends JFrame {
 				else if (type == EXPENSE_ACCOUNTS && !(a instanceof ExpenseAccount)) continue;
 				
 				// Is the budget item scheduled for the given time period
-				long budgetedAmount = getBudgetedAmount(bi,startDay,endDay);
+				long budgetedAmount = getBudgetedAmount(bi.getIntervalStartDate(),
+														bi.getIntervalEndDate(),
+														bi.getInterval(),
+														bi.getAmount(), 
+														Util.convertDateToInt(startDay), 
+														Util.convertDateToInt(endDay));
 				if (budgetedAmount == 0) continue;
 				
 				Integer accNum = new Integer(a.getAccountNum());
@@ -693,66 +701,170 @@ public class DetailedBudgetWindow extends JFrame {
 		
 		return txnMap;
 	}
+	
+	static class IntervalInfo 
+	{
+		public IntervalInfo(int y, int m, int d, boolean p) 
+		{
+			years = y;
+			months = m;
+			days = d;
+			prorate = p;
+		}
+		public int years;
+		public int months;
+		public int days;
+		public boolean prorate;
+		
+		public String toString()
+		{
+			return "" + years + ", " + months + ", " + days + ", " + prorate;
+		}
+	};
+	
+	static private Map intervalMap = null;
+	
+	static private void buildIntervalMap() 
+	{
+		intervalMap = new HashMap();
+		
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ANNUALLY),           
+						new IntervalInfo(1, 0, 0, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_ANNUALLY),
+						new IntervalInfo(1, 0, 0, false));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_SEMI_ANNUALLY),
+						new IntervalInfo(0, 6, 0, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_SEMI_ANNUALLY),
+						new IntervalInfo(0, 6, 0, false));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_TRI_MONTHLY),
+						new IntervalInfo(0, 3, 0, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_TRI_MONTHLY),
+						new IntervalInfo(0, 3, 0, false));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_MONTHLY),
+						new IntervalInfo(0, 1, 0, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_MONTHLY),
+						new IntervalInfo(0, 1, 0, false));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_SEMI_MONTHLY),
+						new IntervalInfo(0, 1, 0, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_SEMI_MONTHLY),
+						new IntervalInfo(0, 1, 0, false));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_TRI_WEEKLY),
+						new IntervalInfo(0, 0, 21, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_TRI_WEEKLY),
+						new IntervalInfo(0, 0, 21, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_BI_WEEKLY),
+						new IntervalInfo(0, 0, 14, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_BI_WEEKLY),
+						new IntervalInfo(0, 0, 14, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_WEEKLY),
+						new IntervalInfo(0, 0, 7, true));
+		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_WEEKLY),
+						new IntervalInfo(0, 0, 7, false));
+	}
 
 	/**
 	 * What is the budgeted amount for the given time period
-	 * @param bi
-	 * @param startDay
-	 * @param endDay
+	 * @param budStart Budget start date
+	 * @param budEnd Budget end date
+	 * @param interval Budget interval type
+	 * @param intervalAmount Budget amount per interval
+	 * @param repStart Report start date
+	 * @param repEnd Report end date
 	 * @return
 	 */
-	private long getBudgetedAmount(BudgetItem bi, Date startDay, Date endDay) {
-		Date budStartDate = DateUtil.getDateYYYYMMDD(bi.getIntervalStartDate());
-		Date budEndDate = DateUtil.getDateYYYYMMDD(bi.getIntervalEndDate());
-		Date budDt = budStartDate;
+	static long getBudgetedAmount(int budStart, int budEnd, 
+								  int interval, long intervalAmount, 
+								  int repStart, int repEnd) 
+	{
+		repEnd = Util.incrementDate(repEnd);
+		budEnd = Util.incrementDate(budEnd);
 
-		// Is it after end day?
-		if (budStartDate == null || budStartDate.after(endDay)) return 0;
-		// Is it before start day
-		if (budEndDate != null && budEndDate.before(startDay)) return 0;
+		if (intervalMap == null)
+			buildIntervalMap();
+				
+		int perStart = budStart;
+		int perEnd;
+
+		// Do the report period and budget period overlap?
+		if (budStart > repEnd || budEnd < repStart)
+			return 0;
+
+		// Special handling for INTERVAL_DAILY (very easy case)
+		if (interval == BudgetItem.INTERVAL_DAILY)
+		{
+			perStart = Math.max(perStart, repStart);
+			perEnd = Math.min(budEnd, repEnd);
+			
+			return intervalAmount * (Util.calculateDaysBetween(perStart, perEnd));
+		}
+		
+		IntervalInfo i = (IntervalInfo) intervalMap.get(new Integer(interval));
 		
 		long amount = 0;
-		boolean done = false;
-		while (!done) {
-			// Is budget in range
-			if (DateUtil.isInRange(budDt, startDay, endDay)) {
-				amount += bi.getAmount();
-			}
-			// Get next budgeted date
-			switch (bi.getInterval()) {
-				case BudgetItem.INTERVAL_ANNUALLY: budDt = DateUtil.addYears(budDt, 1); break;
-				case BudgetItem.INTERVAL_BI_MONTHLY: budDt = DateUtil.addMonths(budDt, 2); break;
-				case BudgetItem.INTERVAL_BI_WEEKLY: budDt = DateUtil.addWeeks(budDt,2); break;
-				case BudgetItem.INTERVAL_DAILY:budDt = DateUtil.addDays(budDt,1);break;
-				case BudgetItem.INTERVAL_MONTHLY:budDt = DateUtil.addMonths(budDt,1); break;
-				case BudgetItem.INTERVAL_SEMI_ANNUALLY: {
-					if (DateUtil.isSameDayOfYear(budDt,budStartDate)) {
-						budDt = DateUtil.addDays(budDt,182);
-					} else {
-						budDt = DateUtil.addDays(budDt,-182);
-						budDt =DateUtil.addYears(budDt, 1);
-					}
-					break;
-				}
-				case BudgetItem.INTERVAL_SEMI_MONTHLY: {
-					if (DateUtil.isSameDayOfMonth(budDt,budStartDate)) {
-						budDt = DateUtil.addDays(budDt,15);
-					} else {
-						budDt = DateUtil.addDays(budDt,-15);
-						budDt =DateUtil.addMonths(budDt, 1);
-					}
-					break;
-				}
-				case BudgetItem.INTERVAL_TRI_MONTHLY: budDt = DateUtil.addMonths(budDt, 3); break;
-				case BudgetItem.INTERVAL_TRI_WEEKLY: budDt = DateUtil.addWeeks(budDt,3); break;
-				case BudgetItem.INTERVAL_WEEKLY: budDt = DateUtil.addWeeks(budDt,1); break;
-				default: done = true;
+		while (perStart < repEnd) 
+		{
+			// budDt is the beginning of one budget period.  Find the
+			// end of the period.
+			perEnd = Util.incrementDate(perStart, i.years, i.months, i.days);
+			
+			if (perEnd <= repStart)
+			{
+				// Haven't yet gotten to the start of the report period
+				perStart = perEnd;
+				continue;
 			}
 
-			// Is it past date
-			if (budDt.after(endDay) || budDt.after(budEndDate)) {
-				break;
+			// Determine if we have a partial period, and what the
+			// start and end dates are.
+			int calcStartDt = perStart, calcEndDt = perEnd;
+			boolean partial = false;
+			
+			if (calcStartDt < repStart) 
+			{
+				calcStartDt = repStart;
+				partial = true;
 			}
+			if (calcEndDt > repEnd)
+			{
+				calcEndDt = repEnd;
+				partial = true;
+			}
+			if (calcEndDt > budEnd)
+			{
+				calcEndDt = budEnd;
+				partial = true;
+			}
+			
+			int periodLen = Util.calculateDaysBetween(perStart, perEnd);
+			int calcLen   = Util.calculateDaysBetween(calcStartDt, calcEndDt);
+
+			// Special handling for semi-monthly:
+			if (interval == BudgetItem.INTERVAL_SEMI_MONTHLY ||
+				interval == BudgetItem.INTERVAL_ONCE_SEMI_MONTHLY)
+			{
+				if (!partial)
+					amount += intervalAmount * 2;
+				else if (i.prorate)
+					amount += (intervalAmount * 20 * calcLen / periodLen + 5) / 10;
+				else
+				{
+					if (calcStartDt == perStart)
+						amount += intervalAmount;
+					int endFirst = Util.incrementDate(calcStartDt, 0, 0, 
+													  periodLen / 2);
+					if (endFirst < calcEndDt)
+						amount += intervalAmount;
+				}
+				perStart = perEnd;
+				continue;
+			}
+
+			if (!partial || (!i.prorate && calcStartDt == perStart))
+				amount += intervalAmount;
+			else if (i.prorate)
+				amount += (10 * intervalAmount * calcLen / periodLen + 5) / 10;
+
+			perStart = perEnd;
 		}
 		
 		return amount;
