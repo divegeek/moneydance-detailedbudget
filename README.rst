@@ -8,10 +8,17 @@ report of Actual Expenses compared to Budget Expenses.
     * Budgeted amounts are only given in period it is expected to be paid 
 
 NOTE: You must change the extension filename to detailedBudget.mxt
-otherwise MoneyDance will not accept the import.  Updates¶
+otherwise MoneyDance will not accept the import.  Updates
 
     * Version 0.5 fixes sorting bug
     * Now (version 0.4) supports Grouping of Parent Categories with subtotals
     * Supports negative transactions 
 
+This extension was originally written by Rolf Lawrenz, licensed under
+the New BSD License (see the COPYING file) and hosted on GoogleCode_.
+Since Rolf has apparently ceased maintenance, Shawn Willden has picked it
+up.
+
+
 .. _Moneydance: http://moneydance.com
+.. _GoogleCode: http://code.google.com/p/moneydance-detailedbudget/
