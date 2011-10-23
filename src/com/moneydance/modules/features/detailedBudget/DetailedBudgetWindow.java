@@ -879,7 +879,7 @@ public class DetailedBudgetWindow extends JFrame {
 	/** Get all categories (A category is actually an Account object) based on 
 	 * Budget selected */
 	private List<Account> getCategories() {
-		List<Account> categories = new ArrayList<Account>();
+		List<Account> categoryList = new ArrayList<Account>();
 		
 		// Do we get all the categories?
 		if (!budgetName.equals("ALL")) {
@@ -895,11 +895,11 @@ public class DetailedBudgetWindow extends JFrame {
 				for (int j = 0; j < b.getItemCount(); j++) {
 					BudgetItem bi = b.getItem(j);
 					Account a = bi.getTransferAccount();
-					addAccountAndSubaccounts(categories,a);
+					addAccountAndSubaccounts(categoryList,a);
 				}
 				
-				sortCategories(categories);
-				return categories;
+				sortCategories(categoryList);
+				return categoryList;
 			}
 
 		}
@@ -909,18 +909,18 @@ public class DetailedBudgetWindow extends JFrame {
 			Enumeration<Account> sa = extension.getUnprotectedContext().getRootAccount().getSubAccounts();
 			for (; sa.hasMoreElements(); ) {
 				Account a = sa.nextElement();
-				addAccountAndSubaccounts(categories,a);
+				addAccountAndSubaccounts(categoryList,a);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		sortCategories(categories);
-		return categories;
+		sortCategories(categoryList);
+		return categoryList;
 	}
 	
-	private void sortCategories(List<Account> categories) {
-		Collections.sort(categories,new Comparator<Account>() {
+	private void sortCategories(List<Account> categoryList) {
+		Collections.sort(categoryList,new Comparator<Account>() {
 			public int compare(Account arg0, Account arg1) {
 				return getFullAccountName(arg0).compareTo(getFullAccountName(arg1));
 			}
@@ -929,21 +929,21 @@ public class DetailedBudgetWindow extends JFrame {
 	}
 
 	/** Add an account to the list if it isnt there already */
-	private void addAccountAndSubaccounts(List<Account> categories, Account account) {
+	private void addAccountAndSubaccounts(List<Account> categoryList, Account account) {
 		if (account == null) return;
 		if (!(account instanceof ExpenseAccount) && 
 			!(account instanceof IncomeAccount)) return;
 		
 		// If not in list, add it
-		if (!categories.contains(account)) {
-			categories.add(account);
+		if (!categoryList.contains(account)) {
+			categoryList.add(account);
 		}
 		
 		@SuppressWarnings("unchecked") Enumeration<Account> ssa = account.getSubAccounts();
 		for (; ssa.hasMoreElements(); ) {
 			Account suba = ssa.nextElement();
 			if (suba == null) continue;
-			addAccountAndSubaccounts(categories, suba);
+			addAccountAndSubaccounts(categoryList, suba);
 		}
 		
 	}

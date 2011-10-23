@@ -24,10 +24,7 @@ public void init() {
     // via the application toolbar
     FeatureModuleContext context = getContext();
     try {
-      context.registerFeature(this, "showconsole",
-//        getIcon("accountlist"),
-        getIcon("detailedbudget"),
-        getName());
+      context.registerFeature(this, "showconsole", getIcon(), getName());
     }
     catch (Exception e) {
       e.printStackTrace(System.err);
@@ -40,7 +37,7 @@ public void cleanup() {
     closeConsole();
   }
   
-  private Image getIcon(String action) {
+  private Image getIcon() {
     try {
       ClassLoader cl = getClass().getClassLoader();
       java.io.InputStream in = 
