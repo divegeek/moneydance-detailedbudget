@@ -28,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
@@ -148,7 +149,7 @@ public class DetailedBudgetWindow extends JFrame {
 	    
 	    getContentPane().add(p);
 
-	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	    setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	    enableEvents(WindowEvent.WINDOW_CLOSING);
 
 	    setSize(600, 500);
@@ -720,7 +721,7 @@ public class DetailedBudgetWindow extends JFrame {
 		{
 			return "" + years + ", " + months + ", " + days + ", " + prorate;
 		}
-	};
+	}
 	
 	static private Map<Integer, IntervalInfo> intervalMap = null;
 	

@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.moneydance.apps.md.model.Account;
@@ -68,7 +69,7 @@ public class AccountListWindow
     p.add(closeButton, AwtUtil.getConstraints(1,3,1,0,1,1,false,true));
     getContentPane().add(p);
 
-    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     enableEvents(WindowEvent.WINDOW_CLOSING);
     closeButton.addActionListener(this);
     clearButton.addActionListener(this);

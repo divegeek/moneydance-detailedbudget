@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.moneydance.apps.md.model.BudgetList;
@@ -179,7 +180,7 @@ public class BudgetSettingsWindow
 
     getContentPane().add(p);
 
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     enableEvents(WindowEvent.WINDOW_CLOSING);
 //    closeButton.addActionListener(this);
 //    clearButton.addActionListener(this);
