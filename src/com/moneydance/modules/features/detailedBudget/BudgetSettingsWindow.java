@@ -64,7 +64,7 @@ public class BudgetSettingsWindow
     // Budget Names
     JLabel lblBudgetName = new JLabel("Budget:");
     p.add(lblBudgetName,AwtUtil.getConstraints(0, row, 1, 1, 1, 1, false, false, GridBagConstraints.EAST,3));
-    List budgetList = new ArrayList();
+    List<String> budgetList = new ArrayList<String>();
     budgetList.add("ALL");
     
     BudgetList bList = extension.getUnprotectedContext().getRootAccount().getBudgetList();
