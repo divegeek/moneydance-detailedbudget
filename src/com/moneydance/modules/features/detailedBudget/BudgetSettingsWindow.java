@@ -285,7 +285,8 @@ public class BudgetSettingsWindow
 //    }
 //  }
 
-  public final void processEvent(AWTEvent evt) {
+  @Override
+public final void processEvent(AWTEvent evt) {
     if(evt.getID()==WindowEvent.WINDOW_CLOSING) {
       extension.closeConsole();
       return;

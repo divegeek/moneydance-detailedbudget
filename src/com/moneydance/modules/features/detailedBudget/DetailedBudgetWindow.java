@@ -717,6 +717,7 @@ public class DetailedBudgetWindow extends JFrame {
 		public int days;
 		public boolean prorate;
 		
+		@Override
 		public String toString()
 		{
 			return "" + years + ", " + months + ", " + days + ", " + prorate;
@@ -969,10 +970,12 @@ public class DetailedBudgetWindow extends JFrame {
 		File defFile = new File(getBudgetPeriodStr()+".html");
 		fc.setSelectedFile(defFile);
 		fc.setFileFilter(new FileFilter() {
+			@Override
 			public String getDescription() {
 				return "HTML Files";
 			}
 		
+			@Override
 			public boolean accept(File f) {
 				if (f.getName().toLowerCase().endsWith("html")) return true;
 				return false;

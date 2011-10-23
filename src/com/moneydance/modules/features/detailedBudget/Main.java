@@ -17,7 +17,8 @@ public class Main
 //  private AccountListWindow accountListWindow = null;
   private BudgetSettingsWindow budgetSettingsWindow = null;
 
-  public void init() {
+  @Override
+public void init() {
     // the first thing we will do is register this module to be invoked
     // via the application toolbar
     FeatureModuleContext context = getContext();
@@ -33,7 +34,8 @@ public class Main
     
   }
 
-  public void cleanup() {
+  @Override
+public void cleanup() {
     closeConsole();
   }
   
@@ -55,7 +57,8 @@ public class Main
   }
   
   /** Process an invokation of this module with the given URI */
-  public void invoke(String uri) {
+  @Override
+public void invoke(String uri) {
     String command = uri;
     //String parameters = "";
     int theIdx = uri.indexOf('?');
@@ -75,7 +78,8 @@ public class Main
     }    
   }
 
-  public String getName() {
+  @Override
+public String getName() {
     return "Detailed Budget";
   }
 

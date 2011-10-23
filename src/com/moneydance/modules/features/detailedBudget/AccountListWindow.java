@@ -101,7 +101,8 @@ public class AccountListWindow
     }
   }
 
-  public final void processEvent(AWTEvent evt) {
+  @Override
+public final void processEvent(AWTEvent evt) {
     if(evt.getID()==WindowEvent.WINDOW_CLOSING) {
       extension.closeConsole();
       return;
@@ -115,14 +116,16 @@ public class AccountListWindow
     extends OutputStream
     implements Runnable
   {    
-    public void write(int b)
+    @Override
+	public void write(int b)
       throws IOException
     {
       accountListArea.append(String.valueOf((char)b));
       repaint();
     }
 
-    public void write(byte[] b)
+    @Override
+	public void write(byte[] b)
       throws IOException
     {
       accountListArea.append(new String(b));
