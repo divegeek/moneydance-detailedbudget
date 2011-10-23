@@ -3,6 +3,7 @@ package com.moneydance.modules.features.detailedBudget;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
@@ -52,7 +53,9 @@ public void cleanup() {
           bout.write(buf, 0, n);
         return Toolkit.getDefaultToolkit().createImage(bout.toByteArray());
       }
-    } catch (Throwable e) { }
+    } catch (IOException e) {
+    	// TODO(divegeek) Figure out what's appropriate here.
+    }
     return null;
   }
   

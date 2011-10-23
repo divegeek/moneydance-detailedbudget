@@ -107,8 +107,6 @@ public final void processEvent(AWTEvent evt) {
       extension.closeConsole();
       return;
     }
-    if(evt.getID()==WindowEvent.WINDOW_OPENED) {
-    }
     super.processEvent(evt);
   }
   

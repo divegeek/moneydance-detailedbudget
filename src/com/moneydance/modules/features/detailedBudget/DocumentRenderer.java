@@ -84,8 +84,7 @@ public class DocumentRenderer implements Printable {
 	public Document getDocument() {
 		if (jeditorPane != null)
 			return jeditorPane.getDocument();
-		else
-			return null;
+		return null;
 	}
 
 	/*
@@ -193,12 +192,12 @@ public class DocumentRenderer implements Printable {
 		// X
 		if (printView(graphics2D, allocation, rootView)) {
 			return Printable.PAGE_EXISTS;
-		} else {
-			pageStartY = 0;
-			pageEndY = 0;
-			currentPage = -1;
-			return Printable.NO_SUCH_PAGE;
 		}
+
+		pageStartY = 0;
+		pageEndY = 0;
+		currentPage = -1;
+		return Printable.NO_SUCH_PAGE;
 	}
 
 	/*

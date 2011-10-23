@@ -214,7 +214,6 @@ public class DetailedBudgetWindow extends JFrame {
 						" - "+DT_FMT.format(col.endDay)+"</strong></td>");
 			}
 			int lastSpan = 3;
-//			if (subtotalsForParentCategories) lastSpan++;
 			sb.append("<td align=\"center\" colspan="+lastSpan+"><strong>TOTAL</strong></td>");
 			sb.append("</tr>\n");
 			// Second line of header
@@ -235,9 +234,6 @@ public class DetailedBudgetWindow extends JFrame {
 		
 		sb.append("<td align=\"center\"><strong>Budget</strong></td>");
 		sb.append("<td align=\"center\"><strong>Actual</strong></td>");
-//		if (subtotalsForParentCategories) {
-//			sb.append("<td align=\"center\"><strong>Actual</strong></td>");
-//		}
 		sb.append("<td align=\"center\"><strong>Diff</strong></td>");
 		sb.append("</tr>\n");
 
@@ -308,8 +304,10 @@ public class DetailedBudgetWindow extends JFrame {
 	public String getCategoriesHTML(List<DetailedBudgetColumn> columns, int type) {
 		StringBuffer sbo = new StringBuffer();
 		sbo.append("<tr><td colspan="+getNumTableColumns(columns)+"><strong>");
-		if (type == INCOME_ACCOUNTS) sbo.append("INCOME");
-		else if (type == EXPENSE_ACCOUNTS) sbo.append("EXPENSE");
+		if (type == INCOME_ACCOUNTS)
+			sbo.append("INCOME");
+		else if (type == EXPENSE_ACCOUNTS)
+			sbo.append("EXPENSE");
 		sbo.append("</strong></td></tr>");
 		
 		// Categories
@@ -323,8 +321,8 @@ public class DetailedBudgetWindow extends JFrame {
 			Account account = iterator.next();
 			StringBuffer sb = new StringBuffer();
 			StringBuffer sbBefore = new StringBuffer();
-			//StringBuffer sbAfter = new StringBuffer();
-			if (account == null) continue;
+			if (account == null)
+				continue;
 			// Only accept income or expense accounts
 			if (type == INCOME_ACCOUNTS && !(account instanceof IncomeAccount)) continue;
 			else if (type == EXPENSE_ACCOUNTS && !(account instanceof ExpenseAccount)) continue;
@@ -372,9 +370,6 @@ public class DetailedBudgetWindow extends JFrame {
 				}
 				sb.append("<td align=\"right\">").append(getCurrencyStr(actual,col.endDay)).append("</td>");
 				addSubtotal(parentSubtotalMap,actual,parentSubPtr++);
-//				if (subtotalsForParentCategories && columns.size() == 1) {
-//					sb.append("<td align=\"right\">&nbsp;</td>");
-//				}
 				if (diffWithSubtotal || columns.size() == 1) {
 					long diff = budget - actual;
 					if (type == INCOME_ACCOUNTS) {
@@ -393,9 +388,6 @@ public class DetailedBudgetWindow extends JFrame {
 				addSubtotal(parentSubtotalMap,totalBudget,parentSubPtr++);
 				sb.append("<td align=\"right\">").append(getCurrencyStr(totalActual,null)).append("</td>");
 				addSubtotal(parentSubtotalMap,totalActual,parentSubPtr++);
-//				if (subtotalsForParentCategories) {
-//					sb.append("<td align=\"right\">&nbsp;</td>");
-//				}
 				long diff = totalBudget - totalActual;
 				if (type == INCOME_ACCOUNTS) {
 					diff = totalActual - totalBudget;
@@ -413,7 +405,6 @@ public class DetailedBudgetWindow extends JFrame {
 //					System.out.println("  parentAccount="+parentAccount.getAccountName()+" last="+lastParentAccount+" account="+account);
 					if (lastParentAccount == null || !lastParentAccount.equals(parentAccount)) {
 						// Add subtotal of previous parent account
-//						if (!account.equals(parentAccount)) {
 						if (lastParentAccount != null) {
 							addParentCategorySubtotalRow(sbBefore,lastParentSubtotalMap);
 //							System.out.println("  sbBefore1="+sbBefore.toString());
@@ -513,9 +504,6 @@ public class DetailedBudgetWindow extends JFrame {
 				sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(budget,null)).append("</strong></td>");
 			}
 			sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(actual,col.endDay)).append("</strong></td>");
-//			if (subtotalsForParentCategories && columns.size() == 1) {
-//				sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(actual,col.endDay)).append("</strong></td>");
-//			}
 			if (diffWithSubtotal || columns.size() == 1) {
 				sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(budget - actual,col.endDay)).append("</strong></td>");
 			}
@@ -527,9 +515,6 @@ public class DetailedBudgetWindow extends JFrame {
 		if (columns.size() > 1) {
 			sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(totalBudget,null)).append("</strong></td>");
 			sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(totalActual,null)).append("</strong></td>");
-//			if (subtotalsForParentCategories) {
-//				sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(totalActual,null)).append("</strong></td>");
-//			}
 			sb.append("<td align=\"right\"><strong>").append(getCurrencyStr(totalBudget - totalActual,null)).append("</strong></td>");
 		}
 		sb.append("</tr>\n");
@@ -993,6 +978,7 @@ public class DetailedBudgetWindow extends JFrame {
                 out.write(txtReport.getText());
                 out.close();
             } catch (IOException e) {
+            	// TODO(divegeek) Figure out what's appropriate here.
             }
         }
 	}
