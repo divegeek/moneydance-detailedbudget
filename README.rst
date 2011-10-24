@@ -10,6 +10,8 @@ report of Actual Expenses compared to Budget Expenses.
 NOTE: You must change the extension filename to detailedBudget.mxt
 otherwise MoneyDance will not accept the import.  Updates
 
+    * Version 1.0.1 fixes NO_REPEAT budget item types.
+    * Version 1.0 fixes various issues caused by changes in Moneydance
     * Version 0.5 fixes sorting bug
     * Now (version 0.4) supports Grouping of Parent Categories with subtotals
     * Supports negative transactions 
