@@ -632,7 +632,7 @@ public class DetailedBudgetWindow extends JFrame {
 		TransactionSet txSet = extension.getUnprotectedContext().getRootAccount().getTransactionSet();
 		
 		// Loop through all transactions
-		@SuppressWarnings("unchecked") Enumeration<AbstractTxn> e = txSet.getAllTransactions();
+		Enumeration<AbstractTxn> e = txSet.getAllTransactions();
 		for (; e.hasMoreElements(); ) {
 			AbstractTxn t = e.nextElement();
 			if (t == null) continue;
@@ -715,38 +715,23 @@ public class DetailedBudgetWindow extends JFrame {
 	{
 		intervalMap = new HashMap<Integer, IntervalInfo>();
 		
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ANNUALLY),           
-						new IntervalInfo(1, 0, 0, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_ANNUALLY),
-						new IntervalInfo(1, 0, 0, false));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_SEMI_ANNUALLY),
-						new IntervalInfo(0, 6, 0, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_SEMI_ANNUALLY),
-						new IntervalInfo(0, 6, 0, false));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_TRI_MONTHLY),
-						new IntervalInfo(0, 3, 0, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_TRI_MONTHLY),
-						new IntervalInfo(0, 3, 0, false));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_MONTHLY),
-						new IntervalInfo(0, 1, 0, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_MONTHLY),
-						new IntervalInfo(0, 1, 0, false));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_SEMI_MONTHLY),
-						new IntervalInfo(0, 1, 0, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_SEMI_MONTHLY),
-						new IntervalInfo(0, 1, 0, false));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_TRI_WEEKLY),
-						new IntervalInfo(0, 0, 21, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_TRI_WEEKLY),
-						new IntervalInfo(0, 0, 21, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_BI_WEEKLY),
-						new IntervalInfo(0, 0, 14, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_BI_WEEKLY),
-						new IntervalInfo(0, 0, 14, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_WEEKLY),
-						new IntervalInfo(0, 0, 7, true));
-		intervalMap.put(new Integer(BudgetItem.INTERVAL_ONCE_WEEKLY),
-						new IntervalInfo(0, 0, 7, false));
+		intervalMap.put(BudgetItem.INTERVAL_NO_REPEAT, new IntervalInfo(3000, 0, 0, false));
+		intervalMap.put(BudgetItem.INTERVAL_ANNUALLY, new IntervalInfo(1, 0, 0, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_ANNUALLY, new IntervalInfo(1, 0, 0, false));
+		intervalMap.put(BudgetItem.INTERVAL_SEMI_ANNUALLY, new IntervalInfo(0, 6, 0, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_SEMI_ANNUALLY, new IntervalInfo(0, 6, 0, false));
+		intervalMap.put(BudgetItem.INTERVAL_TRI_MONTHLY, new IntervalInfo(0, 3, 0, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_TRI_MONTHLY, new IntervalInfo(0, 3, 0, false));
+		intervalMap.put(BudgetItem.INTERVAL_MONTHLY, new IntervalInfo(0, 1, 0, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_MONTHLY, new IntervalInfo(0, 1, 0, false));
+		intervalMap.put(BudgetItem.INTERVAL_SEMI_MONTHLY, new IntervalInfo(0, 1, 0, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_SEMI_MONTHLY, new IntervalInfo(0, 1, 0, false));
+		intervalMap.put(BudgetItem.INTERVAL_TRI_WEEKLY, new IntervalInfo(0, 0, 21, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_TRI_WEEKLY, new IntervalInfo(0, 0, 21, true));
+		intervalMap.put(BudgetItem.INTERVAL_BI_WEEKLY, new IntervalInfo(0, 0, 14, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_BI_WEEKLY, new IntervalInfo(0, 0, 14, true));
+		intervalMap.put(BudgetItem.INTERVAL_WEEKLY, new IntervalInfo(0, 0, 7, true));
+		intervalMap.put(BudgetItem.INTERVAL_ONCE_WEEKLY, new IntervalInfo(0, 0, 7, false));
 	}
 
 	/**
