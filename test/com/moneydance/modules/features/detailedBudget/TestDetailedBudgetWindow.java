@@ -87,5 +87,11 @@ public class TestDetailedBudgetWindow extends TestCase
 												   BudgetItem.INTERVAL_MONTHLY, 62800, 
 												   20100101, 20100619);
 		assertEquals(127626, r);
+
+		// No repeat, within interval
+		r = DetailedBudgetWindow.getBudgetedAmount(20100101, 20101231,
+		                                           BudgetItem.INTERVAL_NO_REPEAT, 100,
+		                                           20100601, 20100619);
+		assertEquals(100, r);
 	}
 }
