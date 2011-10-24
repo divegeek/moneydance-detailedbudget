@@ -11,7 +11,7 @@ http://jakarta.apache.org/ant/index.html
   <property name="pubkeyfile" value="${src}/pub_key"/>
   <property name="privkeyid" value="99"/>
 
-  <property name="build.compiler"  value="classic"/>
+  <property name="build.compiler"  value="modern"/>
   <property name="build.compiler.fulldepend"  value="true"/>
   <property name="dist"  value="../dist"/>
   <property name="tmp"  value="../tmp"/>
@@ -29,7 +29,7 @@ http://jakarta.apache.org/ant/index.html
   </target>   
 
   <target name="detailedBudget" depends="init">
-    <javac target="1.1" source="1.2" srcdir="${src}" debug="${debug}" optimize="${optimize}"
+    <javac target="1.5" source="1.5" srcdir="${src}" debug="${debug}" optimize="${optimize}"
       classpathref="classpath"  destdir="${build}"
       includes="com/moneydance/modules/features/detailedBudget/**"/>
 
